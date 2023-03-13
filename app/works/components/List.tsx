@@ -9,9 +9,10 @@ import Item from "./Item"
 const ProjectListContainer = styled.div`
   padding: 20px 0px;
   width: 100%;
-
-  @media (min-width: ${theme.breakpoints.mobile}) {
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  align-items: center;
 `
 
 console.log(process)

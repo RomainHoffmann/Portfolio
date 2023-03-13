@@ -1,10 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import { theme } from "./theme"
+import { usePathname, useRouter } from "next/navigation"
 
 const MOBILE_NAV_DURATION = 0.7
 
@@ -17,27 +18,25 @@ const navItem = [
 
 const HeaderContainer = styled.header`
   width: 100%;
-  background-color: ${theme.colors.primary};
   display: flex;
   justify-content: flex-end;
   height: 60px;
+  z-index: 1000;
 `
 
 const NavButtonContainer = styled.button`
   width: 40px;
   height: 40px;
-  background-color: ${theme.colors.primary};
   border: none;
-  outline: 1px solid ${theme.colors.outline};
+  outline: 1px solid ${theme.colors.primary};
   cursor: pointer;
   margin: 10px;
-  border-radius: 5px;
 
   span {
     display: block;
     height: 3px;
     margin: 5px 0;
-    background-color: ${theme.colors.outline};
+    background-color: ${theme.colors.primary};
   }
 
   @media (min-width: ${theme.breakpoints.mobile}) {
@@ -93,10 +92,10 @@ const DesktopNavContainer = styled.nav`
     a {
       text-decoration: none;
 
-      color: ${theme.colors.outline};
+      color: ${theme.colors.primary};
       font-size: 1.2rem;
       font-weight: 600;
-      padding: 10px;
+      padding: 0.25rem;
       letter-spacing: 1px;
     }
   }
@@ -109,6 +108,18 @@ const DesktopNavContainer = styled.nav`
   }
 `
 
+const SelectedNavLine = styled(motion.div)`
+  width: 90%;
+  height: 3px;
+  background-color: ${theme.colors.primary};
+`
+
+const SelectedNavLinePlaceHolder = styled(motion.div)`
+  width: 90%;
+  height: 3px;
+  background-color: ${theme.colors.outline};
+`
+
 function Header() {
   const [open, setOpen] = useState<boolean>(false)
   return (
@@ -118,15 +129,46 @@ function Header() {
         <DesktopNavContainer>
           <ul>
             {navItem.map((item, index) => (
-              <li key={index}>
-                <Link href={item.path}>{item.name}</Link>
-              </li>
+              <DesktopLink
+                key={index}
+                name={item.name}
+                path={item.path}
+              ></DesktopLink>
             ))}
           </ul>
         </DesktopNavContainer>
       </HeaderContainer>
-      <AnimatePresence>{open && <MobileNav></MobileNav>}</AnimatePresence>
+      <AnimatePresence>
+        {open && <MobileNav setOpen={setOpen}></MobileNav>}
+      </AnimatePresence>
     </>
+  )
+}
+
+const DesktopLink = ({ name, path }: { name: string; path: string }) => {
+  const pathname = usePathname()
+  const [selected, setSelected] = useState<boolean>(false)
+
+  useEffect(() => {
+    setSelected(pathname === path)
+  }, [pathname])
+
+  return (
+    <li
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+    >
+      <Link href={path}>{name}</Link>
+      {selected ? (
+        <SelectedNavLine layoutId="selectedNavLine"></SelectedNavLine>
+      ) : (
+        <SelectedNavLinePlaceHolder></SelectedNavLinePlaceHolder>
+      )}
+    </li>
   )
 }
 
@@ -148,7 +190,11 @@ const MobileNavButton = ({
   </NavButtonContainer>
 )
 
-const MobileNav = () => {
+const MobileNav = ({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>
+}) => {
   return (
     <MobileNavContainer
       initial={{
@@ -186,7 +232,14 @@ const MobileNav = () => {
       >
         {navItem.map((item, index) => (
           <li key={index}>
-            <Link href={item.path}>{item.name}</Link>
+            <Link
+              onClick={() => {
+                setOpen(false)
+              }}
+              href={item.path}
+            >
+              {item.name}
+            </Link>
           </li>
         ))}
       </motion.ul>

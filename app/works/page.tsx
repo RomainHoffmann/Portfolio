@@ -16,6 +16,8 @@ const page = async () => {
     <section
       style={{
         display: "flex",
+        alignItems: "center",
+        padding: "2rem 0rem",
       }}
     >
       <List items={projects}></List>

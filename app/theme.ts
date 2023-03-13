@@ -6,6 +6,7 @@ export const theme: {
   breakpoints: {
     mobile: string
     laptop: string
+    tablet: string
   }
 } = {
   colors: {
@@ -15,5 +16,6 @@ export const theme: {
   breakpoints: {
     mobile: "425px",
     laptop: "1024px",
+    tablet: "768px",
   },
 }

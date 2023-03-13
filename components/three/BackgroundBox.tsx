@@ -35,15 +35,15 @@ const BackgroundBox = ({
   const bump = () => {
     gsap.to(body.current.scale as unknown as HTMLElement, {
       duration: 0.2,
-      x: SCALE * 0.8,
-      y: SCALE * 0.8,
-      z: SCALE * 0.8,
+      x: 0.8,
+      y: 0.8,
+      z: 0.8,
       onComplete: () => {
         gsap.to(body.current.scale as unknown as HTMLElement, {
           duration: 0.2,
-          x: SCALE,
-          y: SCALE,
-          z: SCALE,
+          x: 1,
+          y: 1,
+          z: 1,
         })
       },
     })

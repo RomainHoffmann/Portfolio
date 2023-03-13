@@ -32,7 +32,7 @@ const WorksButton = styled.button`
   background-color: #000;
   color: ${theme.colors.outline};
   border: none;
-  border-radius: 5px;
+
   font-size: 0.8em;
   font-weight: 700;
   cursor: pointer;

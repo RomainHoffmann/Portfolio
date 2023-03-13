@@ -41,7 +41,7 @@ const Experience = () => {
         // color="#1A1E33"
         color="#0B0B16"
       ></directionalLight>
-      <group>
+      <group scale={0.9}>
         {positions.map((position, index) => (
           <BackgroundBox
             key={index}
